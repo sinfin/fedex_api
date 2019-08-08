@@ -2,17 +2,13 @@ require 'savon'
 
 module FedexApi
   class BaseService
-    def initialize(wsdl)
+    def initialize
       logger = Logger.new('log/fedex_api.log')
-      @client = Savon.client(wsdl: File.join( File.dirname(__FILE__), "wsdl/#{wsdl}"),
+      @client = Savon.client(wsdl: File.join( File.dirname(__FILE__), "wsdl/#{self.class::WSDL_FILENAME}"),
                              logger: logger,
                              log: true,
                              pretty_print_xml: true,
                              convert_request_keys_to: :camelcase)
-    end
-
-    def version
-      {}
     end
 
     def call(method, options)
@@ -30,7 +26,7 @@ module FedexApi
         transaction_detail: {
           customer_transaction_id: "FedexApiTest_#{Time.now.to_i}"
         },
-        version: version
+        version: self.class::VERSION
       }
 
       @client.call(method, message: base_options.merge(options))

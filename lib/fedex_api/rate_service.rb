@@ -3,25 +3,22 @@ require_relative 'base_service'
 module FedexApi
   class RateService < BaseService
     WSDL_FILENAME = 'RateService_v24.wsdl'
+    VERSION = {
+      service_id: 'crs',
+      major: 24,
+      intermediate: 0,
+      minor: 0
+    }
 
     attr_accessor :shipper, :recipient
 
     def initialize
-      super(WSDL_FILENAME)
+      super
 
       @packages = []
 
       # defaults
       @weight_units = 'KG'
-    end
-
-    def version
-      {
-        service_id: 'crs',
-        major: 24,
-        intermediate: 0,
-        minor: 0
-      }
     end
 
     def add_package(hash)
