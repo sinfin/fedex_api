@@ -1,6 +1,3 @@
-require_relative 'base_service'
-require_relative 'modules/requested_shipment'
-
 module FedexApi
   class RateService < BaseService
     include FedexApi::RequestedShipment

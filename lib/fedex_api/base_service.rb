@@ -1,5 +1,3 @@
-require 'savon'
-
 module FedexApi
   class BaseService
     def initialize
