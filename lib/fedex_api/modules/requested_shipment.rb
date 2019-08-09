@@ -6,9 +6,6 @@ module FedexApi
       super
 
       @packages = []
-
-      # defaults
-      @weight_units = 'KG'
     end
 
     def add_package(hash)
@@ -20,7 +17,7 @@ module FedexApi
     private
       def total_weight
         {
-          units: @weight_units,
+          units: FedexApi.weight_unit,
           value: @packages.sum { |p| p[:weight] }
         }
       end
@@ -31,7 +28,7 @@ module FedexApi
             sequence_number: i,
             group_package_count: 1,
             weight: {
-              units: @weight_units,
+              units: FedexApi.weight_unit,
               value: package[:weight].to_s
             }
           }

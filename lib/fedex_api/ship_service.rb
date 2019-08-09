@@ -42,7 +42,7 @@ module FedexApi
               }
             },
             customs_value: {
-              currency: 'EUR',
+              currency: FedexApi.currency,
               amount: 10
             },
             commodities: {
@@ -53,11 +53,11 @@ module FedexApi
               quantity: 1,
               quantity_units: 'UNIT',
               unit_price: {
-                currency: 'EUR',
+                currency: FedexApi.currency,
                 amount: 10
               },
               customs_value: {
-                currency: 'EUR',
+                currency: FedexApi.currency,
                 amount: 10
               }
             }
