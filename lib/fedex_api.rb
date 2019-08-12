@@ -20,4 +20,7 @@ module FedexApi
     config.weight_unit = 'KG'
     config.currency = 'EUR'
   end
+
+  class Error < StandardError
+  end
 end
