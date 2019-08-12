@@ -2,11 +2,8 @@ module FedexApi
   module Service
     class Base
       def initialize
-        logger = Logger.new('log/fedex_api.log')
-        @client = Savon.client(wsdl: File.join( File.dirname(__FILE__), "wsdl/#{self.class::WSDL_FILENAME}"),
-                               logger: logger,
-                               log: true,
-                               pretty_print_xml: true,
+        wsdl_path = File.join(File.dirname(__FILE__), "wsdl/#{self.class::WSDL_FILENAME}")
+        @client = Savon.client(wsdl: wsdl_path,
                                convert_request_keys_to: :camelcase)
       end
 
