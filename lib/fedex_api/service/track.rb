@@ -22,7 +22,8 @@ module FedexApi
         }
         options.merge(track_options) unless track_options.nil?
 
-        call(:track, options)
+        response = call(:track, options)
+        FedexApi::Reply::Track.new(response.body[:track_reply])
       end
 
       private

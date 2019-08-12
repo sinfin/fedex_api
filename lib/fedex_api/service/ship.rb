@@ -73,7 +73,8 @@ module FedexApi
           }
         }.merge(options)
 
-        call(:process_shipment, options)
+        response = call(:process_shipment, options)
+        FedexApi::Reply::Base.new(response.body[:process_shipment_reply])
       end
     end
   end

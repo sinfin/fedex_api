@@ -42,8 +42,9 @@ class FedexApiTest < Minitest::Test
     service.shipper = @shipper
     service.recipient = @recipient
     service.add_package(weight: 1)
-    response = service.get_rates
-    assert 'SUCCESS', response.body[:rate_reply][:highest_severity]
+    reply = service.get_rates
+
+    assert reply.success?
   end
 
   def test_ship_service
@@ -51,13 +52,15 @@ class FedexApiTest < Minitest::Test
     service.shipper = @shipper
     service.recipient = @recipient
     service.add_package(weight: 1)
-    response = service.process_shipment
-    assert 'SUCCESS', response.body[:process_shipment_reply][:highest_severity]
+    reply = service.process_shipment
+
+    assert reply.success?
   end
 
   def test_track_service
     service = FedexApi::Service::Track.new
-    response = service.track('403934084723025', '122816215025810')
-    assert 'SUCCESS', response.body[:track_reply][:highest_severity] != "SUCCESS"
+    reply = service.track('403934084723025', '122816215025810')
+
+    assert reply.success?
   end
 end

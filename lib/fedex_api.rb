@@ -1,7 +1,9 @@
 require 'savon'
 
-require_relative 'fedex_api/service/modules/requested_shipment'
 
+require_relative 'fedex_api/reply/base'
+
+require_relative 'fedex_api/service/modules/requested_shipment'
 require_relative 'fedex_api/service/base'
 require_relative 'fedex_api/service/rate'
 require_relative 'fedex_api/service/ship'

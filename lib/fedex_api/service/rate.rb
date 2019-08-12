@@ -42,7 +42,8 @@ module FedexApi
           }
         }.merge(options)
 
-        call(:get_rates, options)
+        response = call(:get_rates, options)
+        FedexApi::Reply::Base.new(response.body[:rate_reply])
       end
     end
   end
