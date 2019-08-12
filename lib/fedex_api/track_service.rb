@@ -8,18 +8,32 @@ module FedexApi
       minor: 0
     }
 
-    def track(options = {})
+    #
+    def track(*args)
+      tracking_numbers = args
+      track_options = args.pop if args.last.is_a?(Hash)
+
+      raise FedexApi::Error, 'The maximum number of packages within a single track transaction is limited to 30.' if tracking_numbers.size > 30
+
       options = {
-        selection_details: {
-          package_identifier: {
-            type: 'TRACKING_NUMBER_OR_DOORTAG',
-            value: '122816215025810'
-          }
-        },
+        selection_details: selection_details(tracking_numbers),
         processing_options: 'INCLUDE_DETAILED_SCANS'
-      }.merge(options)
+      }
+      options.merge(track_options) unless track_options.nil?
 
       call(:track, options)
     end
+
+    private
+      def selection_details(tracking_numbers)
+        tracking_numbers.map do |n|
+          {
+            package_identifier: {
+              type: 'TRACKING_NUMBER_OR_DOORTAG',
+              value: n
+            }
+          }
+        end
+      end
   end
 end
