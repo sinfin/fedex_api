@@ -5,6 +5,7 @@ require_relative 'fedex_api/modules/requested_shipment'
 require_relative 'fedex_api/base_service'
 require_relative 'fedex_api/rate_service'
 require_relative 'fedex_api/ship_service'
+require_relative 'fedex_api/track_service'
 
 module FedexApi
   class << self
