@@ -57,10 +57,15 @@ class FedexApiTest < Minitest::Test
     assert reply.success?
   end
 
+  # Test Server Mock Tracking Numbers
+  # https://www.fedex.com/us/developer/webhelp/ws/2019/US/wsdvg/Appendix_F_Test_Server_Mock_Tracking_Numbers.htm
+
   def test_track_service
     service = FedexApi::Service::Track.new
     reply = service.track('403934084723025', '122816215025810')
 
     assert reply.success?
+    assert_equal 2, reply.tracking_details.size
+    assert_equal 'Delivered', reply.tracking_details_for('122816215025810')[:status_detail][:description]
   end
 end
