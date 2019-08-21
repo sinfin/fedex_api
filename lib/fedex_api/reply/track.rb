@@ -3,12 +3,12 @@ module FedexApi
     class Track < Base
       def tracking_details
         @tracking_details ||= begin
-          if reply[:completed_track_details].is_a? Array
+          if body[:completed_track_details].is_a? Array
             # multiple packages
-            track_details = reply[:completed_track_details].map { |d| d[:track_details] }
+            track_details = body[:completed_track_details].map { |d| d[:track_details] }
           else
             # single package
-            track_details = [ reply[:completed_track_details][:track_details] ]
+            track_details = [ body[:completed_track_details][:track_details] ]
           end
 
           track_details.reduce({}) do |res, details|
