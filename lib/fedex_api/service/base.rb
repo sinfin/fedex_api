@@ -1,6 +1,6 @@
 module FedexApi
   module Service
-    class Base
+    class Base      
       def initialize
         wsdl_path = File.join(File.dirname(__FILE__), "wsdl/#{self.class::WSDL_FILENAME}")
         @client = Savon.client(wsdl: wsdl_path,
@@ -29,8 +29,20 @@ module FedexApi
           version: self.class::VERSION
         }
 
-        @client.call(method, message: base_options.merge(options))
+        message = hash_deep_compact(base_options.merge(options))
+        @client.call(method, message: message)
       end
+
+      private
+        def hash_deep_compact(obj)
+          return obj unless obj.is_a?(Hash)
+
+          obj.keys.each do |key|
+            hash_deep_compact(obj[key])
+          end
+
+          obj.delete_if { |k, v| v.nil? || v == {} }
+        end
     end
   end
 end
