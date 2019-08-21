@@ -1,10 +1,12 @@
 module FedexApi
   module Service
     module RequestedShipment
+      include FedexApi::Service::Units
+
       attr_accessor :shipper, :recipient, :packages
 
-      def initialize
-        super
+      def initialize(options = {})
+        super(options)
 
         @packages = []
       end
@@ -12,7 +14,7 @@ module FedexApi
       private
         def total_weight
           {
-            units: FedexApi.weight_unit,
+            units: weight_unit,
             value: packages.sum { |p| p[:weight] }
           }
         end
@@ -23,7 +25,7 @@ module FedexApi
               sequence_number: i,
               group_package_count: 1,
               weight: {
-                units: FedexApi.weight_unit,
+                units: weight_unit,
                 value: package[:weight].to_s
               }
             }
@@ -32,7 +34,7 @@ module FedexApi
               length: package[:length],
               width: package[:width],
               height: package[:height],
-              units: FedexApi.dimensions_unit
+              units: dimensions_unit
             } if package[:length] || package[:width] || package[:height]
 
             p

@@ -37,6 +37,15 @@ class FedexApiTest < Minitest::Test
     assert FedexApi.currency == 'USD'
   end
 
+  def test_request_units
+    FedexApi.currency == 'USD'
+    service = FedexApi::Service::Rate.new(currency: 'EUR')
+
+    assert service.currency == 'EUR'
+    assert service.weight_unit == 'KG'
+  end
+
+
   def test_rate_service
     service = FedexApi::Service::Rate.new
     service.shipper = @shipper

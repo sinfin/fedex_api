@@ -1,7 +1,7 @@
 module FedexApi
   module Service
-    class Base      
-      def initialize
+    class Base
+      def initialize(options = {})
         wsdl_path = File.join(File.dirname(__FILE__), "wsdl/#{self.class::WSDL_FILENAME}")
         @client = Savon.client(wsdl: wsdl_path,
                                convert_request_keys_to: :camelcase)
