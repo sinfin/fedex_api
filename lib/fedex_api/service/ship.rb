@@ -68,7 +68,7 @@ module FedexApi
             shipping_document_specification: {
               shipping_document_types: 'LABEL'
             },
-            package_count: @packages.count,
+            package_count: packages.count,
             requested_package_line_items: requested_package_line_items
           }
         }.merge(options)

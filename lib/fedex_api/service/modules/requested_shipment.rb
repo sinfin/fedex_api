@@ -1,7 +1,7 @@
 module FedexApi
   module Service
     module RequestedShipment
-      attr_accessor :shipper, :recipient
+      attr_accessor :shipper, :recipient, :packages
 
       def initialize
         super
@@ -9,22 +9,16 @@ module FedexApi
         @packages = []
       end
 
-      def add_package(hash)
-        @packages << hash
-
-        hash
-      end
-
       private
         def total_weight
           {
             units: FedexApi.weight_unit,
-            value: @packages.sum { |p| p[:weight] }
+            value: packages.sum { |p| p[:weight] }
           }
         end
 
         def requested_package_line_items
-          @packages.map.with_index(1) do |package, i|
+          packages.map.with_index(1) do |package, i|
             {
               sequence_number: i,
               group_package_count: 1,

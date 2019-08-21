@@ -13,12 +13,6 @@ module FedexApi
 
       attr_accessor :shipper, :recipient
 
-      def add_package(hash)
-        @packages << hash
-
-        hash
-      end
-
       def get_rates(options = {})
         options = {
           return_transit_and_commit: true,
@@ -37,7 +31,7 @@ module FedexApi
                 }
               }
             },
-            package_count: @packages.count,
+            package_count: packages.count,
             requested_package_line_items: requested_package_line_items
           }
         }.merge(options)

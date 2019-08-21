@@ -41,7 +41,7 @@ class FedexApiTest < Minitest::Test
     service = FedexApi::Service::Rate.new
     service.shipper = @shipper
     service.recipient = @recipient
-    service.add_package(weight: 1)
+    service.packages << { weight: 1 }
     reply = service.get_rates
 
     assert reply.success?
@@ -51,7 +51,7 @@ class FedexApiTest < Minitest::Test
     service = FedexApi::Service::Ship.new
     service.shipper = @shipper
     service.recipient = @recipient
-    service.add_package(weight: 1)
+    service.packages << { weight: 1 }
     reply = service.process_shipment
 
     assert reply.success?
