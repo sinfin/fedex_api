@@ -11,6 +11,15 @@ module FedexApi
         minor: 0
       }
 
+      attr_accessor :total_insured_value,
+                    :customs_value,
+                    :commodities
+
+      def value=(num)
+        @total_insured_value = num
+        @customs_value = num
+      end
+
       def process_shipment(options = {})
         options = {
           requested_shipment: {
@@ -19,6 +28,7 @@ module FedexApi
             service_type: 'INTERNATIONAL_PRIORITY',
             packaging_type: 'YOUR_PACKAGING',
             total_weight: total_weight,
+            total_insured_value: total_insured_value_hash,
             shipper: shipper,
             recipient: recipient,
             shipping_charges_payment: {
@@ -39,26 +49,8 @@ module FedexApi
                   }
                 }
               },
-              customs_value: {
-                currency: FedexApi.currency,
-                amount: 10
-              },
-              commodities: {
-                number_of_pieces: 1,
-                description: 'test',
-                country_of_manufacture: 'CZ',
-                weight: total_weight,
-                quantity: 1,
-                quantity_units: 'UNIT',
-                unit_price: {
-                  currency: FedexApi.currency,
-                  amount: 10
-                },
-                customs_value: {
-                  currency: FedexApi.currency,
-                  amount: 10
-                }
-              }
+              customs_value: customs_value_hash,
+              commodities: commodities_hash
             },
             label_specification: {
               label_format_type: 'COMMON2D',
@@ -76,6 +68,41 @@ module FedexApi
         response = call(:process_shipment, options)
         FedexApi::Reply::Ship.new(response.body[:process_shipment_reply])
       end
+
+      private
+        def commodities_hash
+          hash = commodities.dup
+
+          %i[unit_price customs_value].each do |key|
+            hash[key] = {
+              currency: FedexApi.currency,
+              amount: hash[key]
+            }
+          end
+
+          {
+            number_of_pieces: 1,
+            description: hash.delete(:description),
+            country_of_manufacture: hash.delete(:country_of_manufacture),
+            weight: total_weight,
+            quantity: 1,
+            quantity_units: 'UNIT'
+          }.merge(hash)
+        end
+
+        def total_insured_value_hash
+          {
+            currency: FedexApi.currency,
+            amount: total_insured_value
+          }
+        end
+
+        def customs_value_hash
+          {
+            currency: FedexApi.currency,
+            amount: customs_value
+          }
+        end
     end
   end
 end
