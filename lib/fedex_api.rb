@@ -12,7 +12,9 @@ require_relative 'fedex_api/service/track'
 
 module FedexApi
   class << self
-    attr_accessor :weight_unit, :currency
+    attr_accessor :dimensions_unit,
+                  :weight_unit,
+                  :currency
   end
 
   def self.configure
@@ -20,6 +22,7 @@ module FedexApi
   end
 
   configure do |config|
+    config.dimensions_unit = 'CM'
     config.weight_unit = 'KG'
     config.currency = 'EUR'
   end
