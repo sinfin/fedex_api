@@ -71,6 +71,7 @@ class FedexApiTest < Minitest::Test
     reply = service.process_shipment
 
     assert reply.success?
+    assert reply.tracking_number
   end
 
   # Test Server Mock Tracking Numbers
