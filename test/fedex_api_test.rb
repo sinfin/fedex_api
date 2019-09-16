@@ -12,8 +12,8 @@ class FedexApiTest < Minitest::Test
       },
       address: {
            street_lines: [ 'address 1', 'address 2' ],
-           city: 'Prague 1',
-           postal_code: '10100',
+           city: 'Prague',
+           postal_code: '13000',
            country_code: 'CZ'
       }
     }
@@ -43,6 +43,21 @@ class FedexApiTest < Minitest::Test
 
     assert service.currency == 'EUR'
     assert service.weight_unit == 'KG'
+  end
+
+  def test_pickup_service
+    @shipper.delete(:account_number)
+    now = DateTime.now
+
+    service = FedexApi::Service::Pickup.new
+    service.pickup_location = @shipper
+    service.ready_timestamp = DateTime.new(now.year, now.month, now.day + 1, 9)
+    service.company_close_time = DateTime.new(now.year, now.month, now.day + 1, 18)
+    service.packages << { weight: 1 }
+    service.remarks = 'Thank you!'
+    reply = service.create_pickup
+
+    assert reply.success?
   end
 
 
