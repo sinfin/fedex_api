@@ -49,6 +49,11 @@ class FedexApiTest < Minitest::Test
     @shipper.delete(:account_number)
     now = DateTime.now
 
+    # no weekends
+    if now.wday == 5 || now.wday == 6
+      now = DateTime.new(now.year, now.month, now.day + 8 - now.wday, now.hour, now.minute)
+    end
+
     service = FedexApi::Service::Pickup.new
     service.pickup_location = @shipper
     service.ready_timestamp = DateTime.new(now.year, now.month, now.day + 1, 9)
