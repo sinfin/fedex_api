@@ -81,12 +81,21 @@ class FedexApiTest < Minitest::Test
     service.shipper = @shipper
     service.recipient = @recipient
     service.packages << { weight: 1, length: 10, width: 10, height: 10 }
-    service.value = 10
-    service.commodities = {
-      description: 'test',
+    service.commodities << {
+      description: 'commodity 1',
+      country_of_manufacture: 'CZ',
+      unit_price: 5,
+      quantity: 4,
+      customs_value: 20,
+      weight: 0.5
+    }
+    service.commodities << {
+      description: 'commodity 1',
       country_of_manufacture: 'CZ',
       unit_price: 10,
-      customs_value: 10
+      quantity: 1,
+      customs_value: 10,
+      weight: 0.5
     }
     reply = service.process_shipment
 

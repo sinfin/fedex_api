@@ -5,8 +5,8 @@ module FedexApi
 
       attr_accessor :shipper, :recipient, :packages
 
-      def initialize(options = {})
-        super(options)
+      def initialize(*args)
+        super(*args)
 
         @packages = []
       end
