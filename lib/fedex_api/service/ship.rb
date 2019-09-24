@@ -20,6 +20,8 @@ module FedexApi
       end
 
       def process_shipment(options = {})
+        @currency = options.delete(:currency) if options[:currency]
+
         options = {
           requested_shipment: {
             ship_timestamp: Time.now.iso8601,
@@ -69,6 +71,10 @@ module FedexApi
       end
 
       private
+        def currency
+          @currency || FedexApi.currency
+        end
+
         def commodities_array
           commodities.map do |hash|
             %i[
@@ -84,7 +90,7 @@ module FedexApi
             commodity = hash.dup
             %i[unit_price customs_value].each do |key|
               commodity[key] = {
-                currency: FedexApi.currency,
+                currency: currency,
                 amount: commodity[key]
               }
             end
@@ -105,14 +111,14 @@ module FedexApi
 
         def total_insured_value_hash
           {
-            currency: FedexApi.currency,
+            currency: currency,
             amount: commodities.map {|c| c[:quantity] * c[:unit_price] }.sum
           }
         end
 
         def customs_value_hash
           {
-            currency: FedexApi.currency,
+            currency: currency,
             amount: commodities.map {|c| c[:customs_value] }.sum
           }
         end
