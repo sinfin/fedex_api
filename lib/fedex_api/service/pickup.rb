@@ -35,6 +35,19 @@ module FedexApi
         response = call(:create_pickup, options)
         FedexApi::Reply::Base.new(response.body[:create_pickup_reply])
       end
+
+
+      def cancel_pickup(number:, date:, location:)
+        options = {
+          carrier_code: 'FDXE',
+          pickup_confirmation_number: number,
+          scheduled_date: date,
+          location: location,
+          remarks: remarks
+        }
+        response = call(:cancel_pickup, options)
+        FedexApi::Reply::Base.new(response.body[:cancel_pickup_reply])
+      end
     end
   end
 end

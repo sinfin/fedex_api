@@ -60,9 +60,20 @@ class FedexApiTest < Minitest::Test
     service.company_close_time = DateTime.new(now.year, now.month, now.day + 1, 18)
     service.packages << { weight: 1 }
     service.remarks = 'Thank you!'
-    reply = service.create_pickup
+    create_pickup_reply = service.create_pickup
 
-    assert reply.success?
+    assert create_pickup_reply.success?
+
+    service = FedexApi::Service::Pickup.new
+    service.remarks = 'sorry :('
+
+    cancel_pickup_reply = service.cancel_pickup(
+      date: Date.new(now.year, now.month, now.day + 1),
+      location: create_pickup_reply.body[:location],
+      number: create_pickup_reply.body[:pickup_confirmation_number]
+    )
+
+    assert cancel_pickup_reply.success?
   end
 
 
