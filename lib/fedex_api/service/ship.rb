@@ -11,7 +11,8 @@ module FedexApi
         minor: 0
       }
 
-      attr_accessor :commodities
+      attr_accessor :commodities,
+                    :delivery_instructions
 
       def initialize(*args)
         super(*args)
@@ -40,7 +41,13 @@ module FedexApi
                 }
               }
             },
-            delivery_instructions: 'My instructions for delivery',
+            special_services_requested: {
+              special_service_types: 'ELECTRONIC_TRADE_DOCUMENTS',
+              etd_detail: {
+                requested_document_copies: 'COMMERCIAL_INVOICE'
+              }
+            },
+            delivery_instructions: delivery_instructions,
             customs_clearance_detail: {
               duties_payment: {
                 payment_type: 'SENDER',
@@ -59,7 +66,13 @@ module FedexApi
               label_stock_type: 'PAPER_8.5X11_TOP_HALF_LABEL'
             },
             shipping_document_specification: {
-              shipping_document_types: 'LABEL'
+              shipping_document_types: 'COMMERCIAL_INVOICE',
+              commercial_invoice_detail: {
+                format: {
+                  image_type: 'PDF',
+                  stock_type: 'PAPER_LETTER'
+                }
+              }
             },
             package_count: packages.count,
             requested_package_line_items: requested_package_line_items

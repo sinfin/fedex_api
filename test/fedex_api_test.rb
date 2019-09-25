@@ -91,6 +91,7 @@ class FedexApiTest < Minitest::Test
     service = FedexApi::Service::Ship.new
     service.shipper = @shipper
     service.recipient = @recipient
+    service.delivery_instructions = 'foo'
     service.packages << { weight: 1, length: 10, width: 10, height: 10 }
     service.commodities << {
       description: 'commodity 1',
