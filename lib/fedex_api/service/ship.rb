@@ -112,6 +112,7 @@ module FedexApi
               number_of_pieces: 1,
               description: commodity.delete(:description),
               country_of_manufacture: commodity.delete(:country_of_manufacture),
+              harmonized_code: commodity.delete(:harmonized_code),
               weight: {
                 units: FedexApi.weight_unit,
                 value: commodity.delete(:weight)
