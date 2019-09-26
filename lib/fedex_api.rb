@@ -17,7 +17,8 @@ module FedexApi
   class << self
     attr_accessor :dimensions_unit,
                   :weight_unit,
-                  :currency
+                  :currency,
+                  :endpoint
   end
 
   def self.configure

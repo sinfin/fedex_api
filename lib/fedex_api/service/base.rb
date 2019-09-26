@@ -5,7 +5,7 @@ module FedexApi
         wsdl_path = File.join(File.dirname(__FILE__), "wsdl/#{self.class::WSDL_FILENAME}")
         @client = Savon.client(wsdl: wsdl_path,
                                convert_request_keys_to: :camelcase,
-                               endpoint: options[:endpoint])
+                               endpoint: FedexApi.endpoint)
       end
 
       def operations
