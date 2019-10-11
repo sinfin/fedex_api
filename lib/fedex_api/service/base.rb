@@ -36,13 +36,18 @@ module FedexApi
 
       private
         def hash_deep_compact(obj)
-          return obj unless obj.is_a?(Hash)
+          case obj
+          when Hash
+            obj.keys.each do |key|
+              hash_deep_compact(obj[key])
+            end
 
-          obj.keys.each do |key|
-            hash_deep_compact(obj[key])
+            obj.delete_if { |k, v| v.nil? || v == {} }
+          when Array
+            obj.map { |i| hash_deep_compact(i) }.compact
+          else
+            obj
           end
-
-          obj.delete_if { |k, v| v.nil? || v == {} }
         end
     end
   end
