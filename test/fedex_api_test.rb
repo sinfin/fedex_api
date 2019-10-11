@@ -11,10 +11,10 @@ class FedexApiTest < Minitest::Test
         phone_number: '12345678'
       },
       address: {
-           street_lines: [ 'address 1', 'address 2' ],
-           city: 'Prague',
-           postal_code: '13000',
-           country_code: 'CZ'
+        street_lines: [ 'address 1', 'address 2' ],
+        city: 'Prague',
+        postal_code: '13000',
+        country_code: 'CZ'
       }
     }
     @recipient = {
@@ -23,10 +23,10 @@ class FedexApiTest < Minitest::Test
         phone_number: '87654321'
       },
       address: {
-           street_lines: 'address',
-           city: 'Brussels',
-           postal_code: '1000',
-           country_code: 'BE'
+        street_lines: 'address',
+        city: 'Brussels',
+        postal_code: '1000',
+        country_code: 'BE'
       }
     }
   end
@@ -76,15 +76,16 @@ class FedexApiTest < Minitest::Test
     assert cancel_pickup_reply.success?
   end
 
-
   def test_rate_service
-    service = FedexApi::Service::Rate.new
+    service = FedexApi::Service::Rate.new(currency: 'EUR')
     service.shipper = @shipper
     service.recipient = @recipient
     service.packages << { weight: 1, length: 10, width: 10, height: 10 }
     reply = service.get_rates
 
     assert reply.success?
+    assert_equal 'EUR',
+                  reply.preffered_account_shipment_rate[:total_net_charge][:currency]
   end
 
   def test_ship_service
@@ -109,8 +110,8 @@ class FedexApiTest < Minitest::Test
       customs_value: 10,
       weight: 0.5
     }
-    reply = service.process_shipment
 
+    reply = service.process_shipment
     assert reply.success?
     assert reply.tracking_number
   end

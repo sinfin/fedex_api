@@ -14,6 +14,8 @@ module FedexApi
       attr_accessor :shipper, :recipient
 
       def get_rates(options = {})
+        @currency = options.delete(:currency) if options[:currency]
+
         options = {
           return_transit_and_commit: true,
           requested_shipment: {
@@ -21,6 +23,7 @@ module FedexApi
             service_type: 'INTERNATIONAL_PRIORITY',
             packaging_type: 'YOUR_PACKAGING',
             total_weight: total_weight,
+            preferred_currency: currency,
             shipper: shipper,
             recipient: recipient,
             shipping_charges_payment: {
@@ -31,13 +34,14 @@ module FedexApi
                 }
               }
             },
+            rate_request_types: 'PREFERRED',
             package_count: packages.count,
             requested_package_line_items: requested_package_line_items
           }
         }.merge(options)
 
         response = call(:get_rates, options)
-        FedexApi::Reply::Base.new(response.body[:rate_reply])
+        FedexApi::Reply::Rate.new(response.body[:rate_reply])
       end
     end
   end

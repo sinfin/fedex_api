@@ -1,7 +1,7 @@
 require 'savon'
 
-
 require_relative 'fedex_api/reply/base'
+require_relative 'fedex_api/reply/rate'
 require_relative 'fedex_api/reply/ship'
 require_relative 'fedex_api/reply/track'
 
