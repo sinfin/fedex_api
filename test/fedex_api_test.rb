@@ -84,6 +84,7 @@ class FedexApiTest < Minitest::Test
     reply = service.get_rates
 
     assert reply.success?
+    assert reply.delivery_date
     assert_equal 'EUR',
                   reply.preffered_account_shipment_rate[:total_net_charge][:currency]
   end

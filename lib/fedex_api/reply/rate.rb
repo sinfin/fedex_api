@@ -13,6 +13,14 @@ module FedexApi
         find_shipment_rate('PREFERRED_ACCOUNT_SHIPMENT')
       end
 
+      def delivery_date
+        body[:rate_reply_details][:delivery_timestamp].to_date
+      end
+
+      def delivery_day_of_week
+        body[:rate_reply_details][:delivery_day_of_week]
+      end
+
       private
         def find_shipment_rate(rate_type)
           shipment_rate = shipment_rates.find do |r|
