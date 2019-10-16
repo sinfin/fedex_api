@@ -23,6 +23,8 @@ module FedexApi
 
       private
         def find_shipment_rate(rate_type)
+          return shipment_rates[:shipment_rate_detail] unless shipment_rates.is_a? Array
+
           shipment_rate = shipment_rates.find do |r|
             r[:shipment_rate_detail][:rate_type] == rate_type
           end
