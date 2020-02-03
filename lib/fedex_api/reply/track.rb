@@ -12,6 +12,13 @@ module FedexApi
           end
 
           track_details.reduce({}) do |res, details|
+            if details.is_a? Array
+              fail unless details.map { |d| d[:tracking_number] }.uniq.length == 1
+
+              # TODO: find out why there are multiple tracking details for one package
+              details = details.last
+            end
+
             tracking_number = details.delete(:tracking_number)
             res[tracking_number] = details
             res
