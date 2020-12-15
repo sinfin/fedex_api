@@ -12,7 +12,8 @@ module FedexApi
       }
 
       attr_accessor :commodities,
-                    :delivery_instructions
+                    :delivery_instructions,
+                    :customer_image_usages
 
       def initialize(*args)
         super(*args)
@@ -71,7 +72,8 @@ module FedexApi
                 format: {
                   image_type: 'PDF',
                   stock_type: 'PAPER_LETTER'
-                }
+                },
+                customer_image_usages: customer_image_usages
               }
             },
             package_count: packages.count,
