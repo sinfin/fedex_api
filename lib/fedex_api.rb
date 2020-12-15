@@ -12,6 +12,7 @@ require_relative 'fedex_api/service/pickup'
 require_relative 'fedex_api/service/rate'
 require_relative 'fedex_api/service/ship'
 require_relative 'fedex_api/service/track'
+require_relative 'fedex_api/service/upload_document'
 
 module FedexApi
   class << self
