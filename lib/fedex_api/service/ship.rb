@@ -3,10 +3,10 @@ module FedexApi
     class Ship < Base
       include FedexApi::Service::RequestedShipment
 
-      WSDL_FILENAME = 'ShipService_v25.wsdl'
+      WSDL_FILENAME = 'ShipService_v26.wsdl'
       VERSION = {
         service_id: 'ship',
-        major: 25,
+        major: 26,
         intermediate: 0,
         minor: 0
       }

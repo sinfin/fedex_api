@@ -3,10 +3,10 @@ module FedexApi
     class Rate < Base
       include FedexApi::Service::RequestedShipment
 
-      WSDL_FILENAME = 'RateService_v24.wsdl'
+      WSDL_FILENAME = 'RateService_v28.wsdl'
       VERSION = {
         service_id: 'crs',
-        major: 24,
+        major: 28,
         intermediate: 0,
         minor: 0
       }

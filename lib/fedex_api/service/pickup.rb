@@ -3,10 +3,10 @@ module FedexApi
     class Pickup < Base
       include FedexApi::Service::RequestedShipment
 
-      WSDL_FILENAME = 'PickupService_v20.wsdl'
+      WSDL_FILENAME = 'PickupService_v22.wsdl'
       VERSION = {
         service_id: 'disp',
-        major: 20,
+        major: 22,
         intermediate: 0,
         minor: 0
       }
