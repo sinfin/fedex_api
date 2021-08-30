@@ -19,7 +19,9 @@ module FedexApi
     attr_accessor :dimensions_unit,
                   :weight_unit,
                   :currency,
-                  :endpoint
+                  :endpoint,
+                  :shipment_label_image_type,
+                  :shipment_label_stock_type
   end
 
   def self.configure
@@ -30,6 +32,9 @@ module FedexApi
     config.dimensions_unit = 'CM'
     config.weight_unit = 'KG'
     config.currency = 'EUR'
+
+    config.shipment_label_image_type = 'PDF'
+    config.shipment_label_stock_type = 'PAPER_8.5X11_TOP_HALF_LABEL'
   end
 
   class Error < StandardError

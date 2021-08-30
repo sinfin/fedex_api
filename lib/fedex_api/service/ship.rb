@@ -56,15 +56,15 @@ module FedexApi
                   responsible_party: {
                     account_number: ENV['FEDEX_ACCOUNT_NUMBER']
                   }
-                }
+                },
               },
               customs_value: customs_value_hash,
               commodities: commodities_array
             },
             label_specification: {
               label_format_type: 'COMMON2D',
-              image_type: 'PDF',
-              label_stock_type: 'PAPER_8.5X11_TOP_HALF_LABEL'
+              image_type: options[:label_image_type] || FedexApi.shipment_label_image_type,
+              label_stock_type: options[:label_stock_type] || FedexApi.shipment_label_stock_type,
             },
             shipping_document_specification: {
               shipping_document_types: 'COMMERCIAL_INVOICE',
