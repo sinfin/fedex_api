@@ -13,16 +13,37 @@ module FedexApi
 
       attr_accessor :commodities,
                     :delivery_instructions,
+                    :commercial_invoice,
                     :customer_image_usages
 
       def initialize(*args)
         super(*args)
 
+        @commercial_invoice = true
         @commodities = []
       end
 
       def process_shipment(options = {})
         @currency = options.delete(:currency) if options[:currency]
+
+        if commercial_invoice
+          special_services_requested = {
+            special_service_types: 'ELECTRONIC_TRADE_DOCUMENTS',
+            etd_detail: {
+              requested_document_copies: 'COMMERCIAL_INVOICE'
+            }
+          }
+          shipping_document_specification = {
+            shipping_document_types: 'COMMERCIAL_INVOICE',
+            commercial_invoice_detail: {
+              format: {
+                image_type: 'PDF',
+                stock_type: 'PAPER_LETTER'
+              },
+              customer_image_usages: customer_image_usages
+            }
+          }
+        end
 
         options = {
           requested_shipment: {
@@ -42,12 +63,7 @@ module FedexApi
                 }
               }
             },
-            special_services_requested: {
-              special_service_types: 'ELECTRONIC_TRADE_DOCUMENTS',
-              etd_detail: {
-                requested_document_copies: 'COMMERCIAL_INVOICE'
-              }
-            },
+            special_services_requested: special_services_requested,
             delivery_instructions: delivery_instructions,
             customs_clearance_detail: {
               duties_payment: {
@@ -66,16 +82,7 @@ module FedexApi
               image_type: options[:label_image_type] || FedexApi.shipment_label_image_type,
               label_stock_type: options[:label_stock_type] || FedexApi.shipment_label_stock_type,
             },
-            shipping_document_specification: {
-              shipping_document_types: 'COMMERCIAL_INVOICE',
-              commercial_invoice_detail: {
-                format: {
-                  image_type: 'PDF',
-                  stock_type: 'PAPER_LETTER'
-                },
-                customer_image_usages: customer_image_usages
-              }
-            },
+            shipping_document_specification: shipping_document_specification,
             package_count: packages.count,
             requested_package_line_items: requested_package_line_items
           }
