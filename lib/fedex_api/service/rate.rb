@@ -30,7 +30,7 @@ module FedexApi
               payment_type: 'SENDER',
               payor: {
                 responsible_party: {
-                  account_number: ENV['FEDEX_ACCOUNT_NUMBER']
+                  account_number: FedexApi.client_account_number
                 }
               }
             },
