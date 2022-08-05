@@ -1,6 +1,6 @@
-<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:ns="http://fedex.com/ws/rate/v28" xmlns:s1="http://schemas.xmlsoap.org/wsdl/soap/" targetNamespace="http://fedex.com/ws/rate/v28" name="RateServiceDefinitions">
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:ns="http://fedex.com/ws/rate/v31" xmlns:s1="http://schemas.xmlsoap.org/wsdl/soap/" targetNamespace="http://fedex.com/ws/rate/v31" name="RateServiceDefinitions">
   <types>
-    <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://fedex.com/ws/rate/v28">
+    <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://fedex.com/ws/rate/v31">
       <xs:element name="RateReply" type="ns:RateReply"/>
       <xs:element name="RateRequest" type="ns:RateRequest"/>
       <xs:complexType name="AdditionalLabelsDetail">
@@ -665,11 +665,7 @@
           <xs:element name="ExportLicenseExpirationDate" type="xs:date" minOccurs="0"/>
           <xs:element name="CIMarksAndNumbers" type="xs:string" minOccurs="0"/>
           <xs:element name="PartNumber" type="xs:string" minOccurs="0"/>
-          <xs:element name="NaftaDetail" type="ns:NaftaCommodityDetail" minOccurs="0">
-            <xs:annotation>
-              <xs:documentation>All data required for this commodity in NAFTA Certificate of Origin.</xs:documentation>
-            </xs:annotation>
-          </xs:element>
+          <xs:element name="UsmcaDetail" type="ns:UsmcaCommodityDetail" minOccurs="0"/>
         </xs:sequence>
       </xs:complexType>
       <xs:simpleType name="CommodityPurposeType">
@@ -1500,6 +1496,31 @@
           <xs:enumeration value="OTHER"/>
           <xs:enumeration value="RECIPIENT"/>
           <xs:enumeration value="SHIPPER"/>
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:complexType name="EPaymentDetail">
+        <xs:sequence>
+          <xs:element name="Id" type="xs:string" minOccurs="0"/>
+          <xs:element name="EPaymentProcessor" type="ns:EPaymentProcessorType" minOccurs="0"/>
+          <xs:element name="EPaymentMode" type="ns:EPaymentModeType" minOccurs="0"/>
+          <xs:element name="MaskedCreditCard" type="xs:string" minOccurs="0"/>
+          <xs:element name="CreditCardExpirationDate" type="xs:string" minOccurs="0"/>
+          <xs:element name="Amount" type="ns:Money" minOccurs="0"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:simpleType name="EPaymentModeType">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="APPLE_PAY"/>
+          <xs:enumeration value="CASH"/>
+          <xs:enumeration value="CHECK"/>
+          <xs:enumeration value="CREDIT_CARD"/>
+          <xs:enumeration value="GOOGLE_PAY"/>
+          <xs:enumeration value="PAYPAL"/>
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:simpleType name="EPaymentProcessorType">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="RETAIL_SINGLE_POINT_OF_SALE"/>
         </xs:restriction>
       </xs:simpleType>
       <xs:complexType name="EdtCommodityTax">
@@ -2596,106 +2617,6 @@
           <xs:element name="Amount" type="xs:decimal" minOccurs="0"/>
         </xs:sequence>
       </xs:complexType>
-      <xs:complexType name="NaftaCertificateOfOriginDetail">
-        <xs:annotation>
-          <xs:documentation>Data required to produce a Certificate of Origin document. Remaining content (business data) to be defined once requirements have been completed.</xs:documentation>
-        </xs:annotation>
-        <xs:sequence>
-          <xs:element name="Format" type="ns:ShippingDocumentFormat" minOccurs="0"/>
-          <xs:element name="BlanketPeriod" type="ns:DateRange" minOccurs="0"/>
-          <xs:element name="ImporterSpecification" type="ns:NaftaImporterSpecificationType" minOccurs="0">
-            <xs:annotation>
-              <xs:documentation>Indicates which Party (if any) from the shipment is to be used as the source of importer data on the NAFTA COO form.</xs:documentation>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="SignatureContact" type="ns:Contact" minOccurs="0">
-            <xs:annotation>
-              <xs:documentation>Contact information for "Authorized Signature" area of form.</xs:documentation>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="ProducerSpecification" type="ns:NaftaProducerSpecificationType" minOccurs="0"/>
-          <xs:element name="Producers" type="ns:NaftaProducer" minOccurs="0" maxOccurs="unbounded"/>
-          <xs:element name="CustomerImageUsages" type="ns:CustomerImageUsage" minOccurs="0" maxOccurs="unbounded"/>
-        </xs:sequence>
-      </xs:complexType>
-      <xs:complexType name="NaftaCommodityDetail">
-        <xs:sequence>
-          <xs:element name="PreferenceCriterion" type="ns:NaftaPreferenceCriterionCode" minOccurs="0">
-            <xs:annotation>
-              <xs:documentation>Defined by NAFTA regulations.</xs:documentation>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="ProducerDetermination" type="ns:NaftaProducerDeterminationCode" minOccurs="0">
-            <xs:annotation>
-              <xs:documentation>Defined by NAFTA regulations.</xs:documentation>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="ProducerId" type="xs:string" minOccurs="0">
-            <xs:annotation>
-              <xs:documentation>Identification of which producer is associated with this commodity (if multiple producers are used in a single shipment).</xs:documentation>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="NetCostMethod" type="ns:NaftaNetCostMethodCode" minOccurs="0"/>
-          <xs:element name="NetCostDateRange" type="ns:DateRange" minOccurs="0">
-            <xs:annotation>
-              <xs:documentation>Date range over which RVC net cost was calculated.</xs:documentation>
-            </xs:annotation>
-          </xs:element>
-        </xs:sequence>
-      </xs:complexType>
-      <xs:simpleType name="NaftaImporterSpecificationType">
-        <xs:restriction base="xs:string">
-          <xs:enumeration value="IMPORTER_OF_RECORD"/>
-          <xs:enumeration value="RECIPIENT"/>
-          <xs:enumeration value="UNKNOWN"/>
-          <xs:enumeration value="VARIOUS"/>
-        </xs:restriction>
-      </xs:simpleType>
-      <xs:simpleType name="NaftaNetCostMethodCode">
-        <xs:restriction base="xs:string">
-          <xs:enumeration value="NC"/>
-          <xs:enumeration value="NO"/>
-        </xs:restriction>
-      </xs:simpleType>
-      <xs:simpleType name="NaftaPreferenceCriterionCode">
-        <xs:annotation>
-          <xs:documentation>See instructions for NAFTA Certificate of Origin for code definitions.</xs:documentation>
-        </xs:annotation>
-        <xs:restriction base="xs:string">
-          <xs:enumeration value="A"/>
-          <xs:enumeration value="B"/>
-          <xs:enumeration value="C"/>
-          <xs:enumeration value="D"/>
-          <xs:enumeration value="E"/>
-          <xs:enumeration value="F"/>
-        </xs:restriction>
-      </xs:simpleType>
-      <xs:complexType name="NaftaProducer">
-        <xs:sequence>
-          <xs:element name="Id" type="xs:string" minOccurs="0"/>
-          <xs:element name="Producer" type="ns:Party" minOccurs="0"/>
-        </xs:sequence>
-      </xs:complexType>
-      <xs:simpleType name="NaftaProducerDeterminationCode">
-        <xs:annotation>
-          <xs:documentation>See instructions for NAFTA Certificate of Origin for code definitions.</xs:documentation>
-        </xs:annotation>
-        <xs:restriction base="xs:string">
-          <xs:enumeration value="NO_1"/>
-          <xs:enumeration value="NO_2"/>
-          <xs:enumeration value="NO_3"/>
-          <xs:enumeration value="YES"/>
-        </xs:restriction>
-      </xs:simpleType>
-      <xs:simpleType name="NaftaProducerSpecificationType">
-        <xs:restriction base="xs:string">
-          <xs:enumeration value="AVAILABLE_UPON_REQUEST"/>
-          <xs:enumeration value="MULTIPLE_SPECIFIED"/>
-          <xs:enumeration value="SAME"/>
-          <xs:enumeration value="SINGLE_SPECIFIED"/>
-          <xs:enumeration value="UNKNOWN"/>
-        </xs:restriction>
-      </xs:simpleType>
       <xs:simpleType name="NetExplosiveClassificationType">
         <xs:restriction base="xs:string">
           <xs:enumeration value="NET_EXPLOSIVE_CONTENT"/>
@@ -2985,10 +2906,16 @@
         <xs:sequence>
           <xs:element name="PaymentType" type="ns:PaymentType" minOccurs="0"/>
           <xs:element name="Payor" type="ns:Payor" minOccurs="0"/>
+          <xs:element name="EPaymentDetail" type="ns:EPaymentDetail" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>FOR FEDEX INTERNAL USE ONLY</xs:documentation>
+            </xs:annotation>
+          </xs:element>
         </xs:sequence>
       </xs:complexType>
       <xs:simpleType name="PaymentType">
         <xs:restriction base="xs:string">
+          <xs:enumeration value="EPAYMENT"/>
           <xs:enumeration value="SENDER"/>
         </xs:restriction>
       </xs:simpleType>
@@ -3520,10 +3447,6 @@
           <xs:enumeration value="ELECTRONIC_INTEGRATED_CIRCUIT_WORKSHEET"/>
           <xs:enumeration value="FILM_AND_VIDEO_CERTIFICATE"/>
           <xs:enumeration value="INTERIM_FOOTWEAR_INVOICE"/>
-          <xs:enumeration value="NAFTA_CERTIFICATE_OF_ORIGIN_CANADA_ENGLISH"/>
-          <xs:enumeration value="NAFTA_CERTIFICATE_OF_ORIGIN_CANADA_FRENCH"/>
-          <xs:enumeration value="NAFTA_CERTIFICATE_OF_ORIGIN_SPANISH"/>
-          <xs:enumeration value="NAFTA_CERTIFICATE_OF_ORIGIN_UNITED_STATES"/>
           <xs:enumeration value="PACKING_LIST"/>
           <xs:enumeration value="PRINTED_CIRCUIT_BOARD_WORKSHEET"/>
           <xs:enumeration value="REPAIRED_WATCH_BREAKOUT_WORKSHEET"/>
@@ -3533,14 +3456,20 @@
           <xs:enumeration value="UNITED_STATES_CARIBBEAN_BASIN_TRADE_PARTNERSHIP_ACT_CERTIFICATE_OF_ORIGIN_TEXTILES"/>
           <xs:enumeration value="UNITED_STATES_NEW_WATCH_WORKSHEET"/>
           <xs:enumeration value="UNITED_STATES_WATCH_REPAIR_DECLARATION"/>
+          <xs:enumeration value="USMCA_CERTIFICATION_OF_ORIGIN_ENGLISH"/>
+          <xs:enumeration value="USMCA_CERTIFICATION_OF_ORIGIN_FRENCH"/>
+          <xs:enumeration value="USMCA_CERTIFICATION_OF_ORIGIN_SPANISH"/>
+          <xs:enumeration value="USMCA_COMMERCIAL_INVOICE_CERTIFICATION_OF_ORIGIN_ENGLISH"/>
+          <xs:enumeration value="USMCA_COMMERCIAL_INVOICE_CERTIFICATION_OF_ORIGIN_FRENCH"/>
+          <xs:enumeration value="USMCA_COMMERCIAL_INVOICE_CERTIFICATION_OF_ORIGIN_SPANISH"/>
         </xs:restriction>
       </xs:simpleType>
       <xs:simpleType name="RegulatoryControlType">
         <xs:restriction base="xs:string">
           <xs:enumeration value="FOOD_OR_PERISHABLE"/>
-          <xs:enumeration value="NAFTA"/>
           <xs:enumeration value="NOT_APPLICABLE_FOR_LOW_CUSTOMS_VALUE_EXCEPTION"/>
           <xs:enumeration value="NOT_IN_FREE_CIRCULATION"/>
+          <xs:enumeration value="USMCA"/>
         </xs:restriction>
       </xs:simpleType>
       <xs:complexType name="RegulatoryLabelContentDetail">
@@ -3755,9 +3684,10 @@
           <xs:enumeration value="FEDEX_FREIGHT_STRAIGHT_BILL_OF_LADING"/>
           <xs:enumeration value="GENERAL_AGENCY_AGREEMENT"/>
           <xs:enumeration value="LABEL"/>
-          <xs:enumeration value="NAFTA_CERTIFICATE_OF_ORIGIN"/>
           <xs:enumeration value="PRO_FORMA_INVOICE"/>
           <xs:enumeration value="RETURN_INSTRUCTIONS"/>
+          <xs:enumeration value="USMCA_CERTIFICATION_OF_ORIGIN"/>
+          <xs:enumeration value="USMCA_COMMERCIAL_INVOICE_CERTIFICATION_OF_ORIGIN"/>
           <xs:enumeration value="VICS_BILL_OF_LADING"/>
         </xs:restriction>
       </xs:simpleType>
@@ -4468,7 +4398,7 @@
           <xs:element name="StockType" type="ns:ShippingDocumentStockType" minOccurs="0"/>
           <xs:element name="ProvideInstructions" type="xs:boolean" minOccurs="0">
             <xs:annotation>
-              <xs:documentation>For those shipping document types which have both a "form" and "instructions" component (e.g. NAFTA Certificate of Origin and General Agency Agreement), this field indicates whether to provide the instructions.</xs:documentation>
+              <xs:documentation>For those shipping document types which have both a "form" and "instructions" component (e.g. General Agency Agreement), this field indicates whether to provide the instructions.</xs:documentation>
             </xs:annotation>
           </xs:element>
           <xs:element name="OptionsRequested" type="ns:DocumentFormatOptionsRequested" minOccurs="0"/>
@@ -4523,6 +4453,7 @@
           </xs:element>
           <xs:element name="CertificateOfOrigin" type="ns:CertificateOfOriginDetail" minOccurs="0"/>
           <xs:element name="CommercialInvoiceDetail" type="ns:CommercialInvoiceDetail" minOccurs="0"/>
+          <xs:element name="UsmcaCommercialInvoiceCertificationOfOriginDetail" type="ns:UsmcaCommercialInvoiceCertificationOfOriginDetail" minOccurs="0"/>
           <xs:element name="CustomPackageDocumentDetail" type="ns:CustomDocumentDetail" minOccurs="0" maxOccurs="unbounded">
             <xs:annotation>
               <xs:documentation>Specifies the production of each package-level custom document (the same specification is used for all packages).</xs:documentation>
@@ -4535,7 +4466,7 @@
           </xs:element>
           <xs:element name="ExportDeclarationDetail" type="ns:ExportDeclarationDetail" minOccurs="0"/>
           <xs:element name="GeneralAgencyAgreementDetail" type="ns:GeneralAgencyAgreementDetail" minOccurs="0"/>
-          <xs:element name="NaftaCertificateOfOriginDetail" type="ns:NaftaCertificateOfOriginDetail" minOccurs="0"/>
+          <xs:element name="UsmcaCertificationOfOriginDetail" type="ns:UsmcaCertificationOfOriginDetail" minOccurs="0"/>
           <xs:element name="Op900Detail" type="ns:Op900Detail" minOccurs="0">
             <xs:annotation>
               <xs:documentation>Specifies the production of the OP-900 document for hazardous materials packages.</xs:documentation>
@@ -4663,7 +4594,6 @@
           <xs:enumeration value="APPOINTMENT_DELIVERY"/>
           <xs:enumeration value="BROKER_SELECT_OPTION"/>
           <xs:enumeration value="CANADIAN_DESTINATION"/>
-          <xs:enumeration value="CLEARANCE_ENTRY_FEE"/>
           <xs:enumeration value="COD"/>
           <xs:enumeration value="CUT_FLOWERS"/>
           <xs:enumeration value="DANGEROUS_GOODS"/>
@@ -4686,6 +4616,8 @@
           <xs:enumeration value="FREIGHT_ON_VALUE"/>
           <xs:enumeration value="FREIGHT_TO_COLLECT"/>
           <xs:enumeration value="FUEL"/>
+          <xs:enumeration value="HIGH_COST_SERVICE_AREA_DESTINATION"/>
+          <xs:enumeration value="HIGH_COST_SERVICE_AREA_ORIGIN"/>
           <xs:enumeration value="HOLD_AT_LOCATION"/>
           <xs:enumeration value="HOME_DELIVERY_APPOINTMENT"/>
           <xs:enumeration value="HOME_DELIVERY_DATE_CERTAIN"/>
@@ -4885,10 +4817,66 @@
           <xs:enumeration value="CERTIFICATE_OF_ORIGIN"/>
           <xs:enumeration value="COMMERCIAL_INVOICE"/>
           <xs:enumeration value="ETD_LABEL"/>
-          <xs:enumeration value="NAFTA_CERTIFICATE_OF_ORIGIN"/>
           <xs:enumeration value="NET_RATE_SHEET"/>
           <xs:enumeration value="OTHER"/>
           <xs:enumeration value="PRO_FORMA_INVOICE"/>
+          <xs:enumeration value="USMCA_CERTIFICATION_OF_ORIGIN"/>
+          <xs:enumeration value="USMCA_COMMERCIAL_INVOICE_CERTIFICATION_OF_ORIGIN"/>
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:complexType name="UsmcaCertificationOfOriginDetail">
+        <xs:sequence>
+          <xs:element name="Format" type="ns:ShippingDocumentFormat" minOccurs="0"/>
+          <xs:element name="BlanketPeriod" type="ns:DateRange" minOccurs="0"/>
+          <xs:element name="CertifierSpecification" type="ns:UsmcaCertifierSpecificationType" minOccurs="0"/>
+          <xs:element name="ImporterSpecification" type="ns:UsmcaImporterSpecificationType" minOccurs="0"/>
+          <xs:element name="ProducerSpecification" type="ns:UsmcaProducerSpecificationType" minOccurs="0"/>
+          <xs:element name="Producer" type="ns:Party" minOccurs="0"/>
+          <xs:element name="CustomerImageUsages" type="ns:CustomerImageUsage" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:simpleType name="UsmcaCertifierSpecificationType">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="EXPORTER"/>
+          <xs:enumeration value="IMPORTER"/>
+          <xs:enumeration value="PRODUCER"/>
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:complexType name="UsmcaCommercialInvoiceCertificationOfOriginDetail">
+        <xs:sequence>
+          <xs:element name="Format" type="ns:ShippingDocumentFormat" minOccurs="0"/>
+          <xs:element name="CustomerImageUsages" type="ns:CustomerImageUsage" minOccurs="0" maxOccurs="unbounded"/>
+          <xs:element name="FormVersion" type="xs:string" minOccurs="0"/>
+          <xs:element name="CertifierSpecification" type="ns:UsmcaCertifierSpecificationType" minOccurs="0"/>
+          <xs:element name="ProducerSpecification" type="ns:UsmcaProducerSpecificationType" minOccurs="0"/>
+          <xs:element name="Producer" type="ns:Party" minOccurs="0"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="UsmcaCommodityDetail">
+        <xs:sequence>
+          <xs:element name="OriginCriterion" type="ns:UsmcaOriginCriterionCode" minOccurs="0"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:simpleType name="UsmcaImporterSpecificationType">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="UNKNOWN"/>
+          <xs:enumeration value="VARIOUS"/>
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:simpleType name="UsmcaOriginCriterionCode">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="A"/>
+          <xs:enumeration value="B"/>
+          <xs:enumeration value="C"/>
+          <xs:enumeration value="D"/>
+          <xs:enumeration value="E"/>
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:simpleType name="UsmcaProducerSpecificationType">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="AVAILABLE_UPON_REQUEST"/>
+          <xs:enumeration value="SAME_AS_EXPORTER"/>
+          <xs:enumeration value="VARIOUS"/>
         </xs:restriction>
       </xs:simpleType>
       <xs:complexType name="VariableHandlingChargeDetail">
@@ -5007,7 +4995,7 @@
               <xs:documentation>Identifies a system or sub-system which performs an operation.</xs:documentation>
             </xs:annotation>
           </xs:element>
-          <xs:element name="Major" type="xs:int" fixed="28" minOccurs="1">
+          <xs:element name="Major" type="xs:int" fixed="31" minOccurs="1">
             <xs:annotation>
               <xs:documentation>Identifies the service business level.</xs:documentation>
             </xs:annotation>
@@ -5041,7 +5029,7 @@
   <binding name="RateServiceSoapBinding" type="ns:RatePortType">
     <s1:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
     <operation name="getRates">
-      <s1:operation soapAction="http://fedex.com/ws/rate/v28/getRates" style="document"/>
+      <s1:operation soapAction="http://fedex.com/ws/rate/v31/getRates" style="document"/>
       <input>
         <s1:body use="literal"/>
       </input>

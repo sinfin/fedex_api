@@ -3,10 +3,10 @@ module FedexApi
     class Ship < Base
       include FedexApi::Service::RequestedShipment
 
-      WSDL_FILENAME = 'ShipService_v26.wsdl'
+      WSDL_FILENAME = 'ShipService_v28.wsdl'
       VERSION = {
         service_id: 'ship',
-        major: 26,
+        major: 28,
         intermediate: 0,
         minor: 0
       }
@@ -49,7 +49,7 @@ module FedexApi
           requested_shipment: {
             ship_timestamp: Time.now.iso8601,
             dropoff_type: 'REGULAR_PICKUP',
-            service_type: 'INTERNATIONAL_PRIORITY',
+            service_type: 'FEDEX_INTERNATIONAL_PRIORITY',
             packaging_type: 'YOUR_PACKAGING',
             total_weight: total_weight,
             total_insured_value: total_insured_value_hash,

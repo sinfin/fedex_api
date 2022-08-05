@@ -1,10 +1,10 @@
 module FedexApi
   module Service
     class Track < Base
-      WSDL_FILENAME = 'TrackService_v19.wsdl'
+      WSDL_FILENAME = 'TrackService_v20.wsdl'
       VERSION = {
         service_id: 'trck',
-        major: 19,
+        major: 20,
         intermediate: 0,
         minor: 0
       }

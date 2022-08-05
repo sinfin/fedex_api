@@ -1,10 +1,10 @@
 module FedexApi
   module Service
     class UploadDocument < Base
-      WSDL_FILENAME = 'UploadDocumentService_v17.wsdl'
+      WSDL_FILENAME = 'UploadDocumentService_v19.wsdl'
       VERSION = {
         service_id: 'cdus',
-        major: 17,
+        major: 19,
         intermediate: 0,
         minor: 0
       }

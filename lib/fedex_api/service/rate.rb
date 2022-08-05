@@ -3,10 +3,10 @@ module FedexApi
     class Rate < Base
       include FedexApi::Service::RequestedShipment
 
-      WSDL_FILENAME = 'RateService_v28.wsdl'
+      WSDL_FILENAME = 'RateService_v31.wsdl'
       VERSION = {
         service_id: 'crs',
-        major: 28,
+        major: 31,
         intermediate: 0,
         minor: 0
       }
@@ -20,7 +20,7 @@ module FedexApi
           return_transit_and_commit: true,
           requested_shipment: {
             ship_timestamp: Time.now.iso8601,
-            service_type: 'INTERNATIONAL_PRIORITY',
+            service_type: 'FEDEX_INTERNATIONAL_PRIORITY',
             packaging_type: 'YOUR_PACKAGING',
             total_weight: total_weight,
             preferred_currency: currency,
