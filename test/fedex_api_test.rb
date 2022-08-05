@@ -1,11 +1,10 @@
 require 'minitest/autorun'
-require 'dotenv/load'
-require 'fedex_api'
+require_relative '../lib/fedex_api'
 
 class FedexApiTest < Minitest::Test
   def setup
     @shipper = {
-      account_number: ENV['FEDEX_ACCOUNT_NUMBER'],
+      account_number: FedexApi.client_account_number,
       contact: {
         company_name: 'test',
         phone_number: '12345678'
