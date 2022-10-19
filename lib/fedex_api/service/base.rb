@@ -24,9 +24,6 @@ module FedexApi
             account_number: FedexApi.client_account_number,
             meter_number: FedexApi.client_meter_number
           },
-          transaction_detail: {
-            customer_transaction_id: "FedexApiTest_#{Time.now.to_i}"
-          },
           version: self.class::VERSION
         }
 
