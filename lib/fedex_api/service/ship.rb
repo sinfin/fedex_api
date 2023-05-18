@@ -50,7 +50,7 @@ module FedexApi
             ship_timestamp: Time.now.iso8601,
             dropoff_type: 'REGULAR_PICKUP',
             service_type: 'FEDEX_INTERNATIONAL_PRIORITY',
-            packaging_type: 'YOUR_PACKAGING',
+            packaging_type: packaging_type,
             total_weight: total_weight,
             total_insured_value: total_insured_value_hash,
             shipper: shipper,
@@ -93,6 +93,15 @@ module FedexApi
       end
 
       private
+
+        def packaging_type
+          case total_weight[:value]
+          when 0..0.5 then 'FEDEX_ENVELOPE'
+          when 0.51..10 then 'FEDEX_PAK'
+          else  'YOUR_PACKAGING'
+          end
+        end
+
         def currency
           @currency || FedexApi.currency
         end

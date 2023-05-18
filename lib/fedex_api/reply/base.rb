@@ -8,7 +8,7 @@ module FedexApi
       end
 
       def success?
-        body[:highest_severity] == 'SUCCESS'
+        body[:highest_severity] == 'SUCCESS' || body[:highest_severity] == 'WARNING'
       end
 
       def error?
