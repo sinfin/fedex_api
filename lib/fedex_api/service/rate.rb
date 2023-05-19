@@ -21,7 +21,7 @@ module FedexApi
           requested_shipment: {
             ship_timestamp: Time.now.iso8601,
             service_type: 'FEDEX_INTERNATIONAL_PRIORITY',
-            packaging_type: 'YOUR_PACKAGING',
+            packaging_type: packaging_type,
             total_weight: total_weight,
             preferred_currency: currency,
             shipper: shipper,
@@ -39,10 +39,20 @@ module FedexApi
             requested_package_line_items: requested_package_line_items
           }
         }.merge(options)
-
         response = call(:get_rates, options)
         FedexApi::Reply::Rate.new(response.body[:rate_reply])
       end
+
+      private
+
+      def packaging_type
+        case total_weight[:value]
+        when 0..0.5 then 'FEDEX_ENVELOPE'
+        when 0.51..10 then 'FEDEX_PAK'
+        else  'YOUR_PACKAGING'
+        end
+      end
+
     end
   end
 end
