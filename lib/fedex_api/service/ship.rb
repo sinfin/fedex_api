@@ -14,13 +14,15 @@ module FedexApi
       attr_accessor :commodities,
                     :delivery_instructions,
                     :commercial_invoice,
-                    :customer_image_usages
+                    :customer_image_usages,
+                    :service_type
 
       def initialize(*args)
         super(*args)
 
         @commercial_invoice = true
         @commodities = []
+        @service_type = 'FEDEX_INTERNATIONAL_PRIORITY'
       end
 
       def process_shipment(options = {})
@@ -49,7 +51,7 @@ module FedexApi
           requested_shipment: {
             ship_timestamp: Time.now.iso8601,
             dropoff_type: 'REGULAR_PICKUP',
-            service_type: 'FEDEX_INTERNATIONAL_PRIORITY',
+            service_type: service_type,
             packaging_type: packaging_type,
             total_weight: total_weight,
             total_insured_value: total_insured_value_hash,
@@ -72,7 +74,7 @@ module FedexApi
                   responsible_party: {
                     account_number: FedexApi.client_account_number
                   }
-                },
+                }
               },
               customs_value: customs_value_hash,
               commodities: commodities_array
@@ -80,7 +82,7 @@ module FedexApi
             label_specification: {
               label_format_type: 'COMMON2D',
               image_type: options[:label_image_type] || FedexApi.shipment_label_image_type,
-              label_stock_type: options[:label_stock_type] || FedexApi.shipment_label_stock_type,
+              label_stock_type: options[:label_stock_type] || FedexApi.shipment_label_stock_type
             },
             shipping_document_specification: shipping_document_specification,
             package_count: packages.count,
@@ -94,66 +96,66 @@ module FedexApi
 
       private
 
-        def packaging_type
-          case total_weight[:value]
-          when 0..0.5 then 'FEDEX_ENVELOPE'
-          when 0.51..10 then 'FEDEX_PAK'
-          else  'YOUR_PACKAGING'
+      def packaging_type
+        case total_weight[:value]
+        when 0..0.5 then 'FEDEX_ENVELOPE'
+        when 0.51..10 then 'FEDEX_PAK'
+        else 'YOUR_PACKAGING'
+        end
+      end
+
+      def currency
+        @currency || FedexApi.currency
+      end
+
+      def commodities_array
+        commodities.map do |hash|
+          %i[
+            description
+            country_of_manufacture
+            unit_price
+            customs_value
+            weight
+          ].each do |required_key|
+            raise "commodities: #{required_key} is required!" unless hash.key?(required_key)
           end
-        end
 
-        def currency
-          @currency || FedexApi.currency
-        end
-
-        def commodities_array
-          commodities.map do |hash|
-            %i[
-              description
-              country_of_manufacture
-              unit_price
-              customs_value
-              weight
-            ].each do |required_key|
-              raise "commodities: #{required_key} is required!" if !hash.key?(required_key)
-            end
-
-            commodity = hash.dup
-            %i[unit_price customs_value].each do |key|
-              commodity[key] = {
-                currency: currency,
-                amount: commodity[key]
-              }
-            end
-
-            {
-              number_of_pieces: 1,
-              description: commodity.delete(:description),
-              country_of_manufacture: commodity.delete(:country_of_manufacture),
-              harmonized_code: commodity.delete(:harmonized_code),
-              weight: {
-                units: FedexApi.weight_unit,
-                value: commodity.delete(:weight)
-              },
-              quantity: 1,
-              quantity_units: 'UNIT'
-            }.merge(commodity)
+          commodity = hash.dup
+          %i[unit_price customs_value].each do |key|
+            commodity[key] = {
+              currency: currency,
+              amount: commodity[key]
+            }
           end
-        end
 
-        def total_insured_value_hash
           {
-            currency: currency,
-            amount: commodities.map {|c| c[:quantity] * c[:unit_price] }.sum
-          }
+            number_of_pieces: 1,
+            description: commodity.delete(:description),
+            country_of_manufacture: commodity.delete(:country_of_manufacture),
+            harmonized_code: commodity.delete(:harmonized_code),
+            weight: {
+              units: FedexApi.weight_unit,
+              value: commodity.delete(:weight)
+            },
+            quantity: 1,
+            quantity_units: 'UNIT'
+          }.merge(commodity)
         end
+      end
 
-        def customs_value_hash
-          {
-            currency: currency,
-            amount: commodities.map {|c| c[:customs_value] }.sum
-          }
-        end
+      def total_insured_value_hash
+        {
+          currency: currency,
+          amount: commodities.map { |c| c[:quantity] * c[:unit_price] }.sum
+        }
+      end
+
+      def customs_value_hash
+        {
+          currency: currency,
+          amount: commodities.map { |c| c[:customs_value] }.sum
+        }
+      end
     end
   end
 end
