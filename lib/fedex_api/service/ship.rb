@@ -69,7 +69,7 @@ module FedexApi
             delivery_instructions: delivery_instructions,
             customs_clearance_detail: {
               duties_payment: {
-                payment_type: 'SENDER',
+                payment_type: 'RECIPIENT',
                 payor: {
                   responsible_party: {
                     account_number: FedexApi.client_account_number

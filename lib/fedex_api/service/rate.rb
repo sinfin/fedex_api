@@ -49,7 +49,7 @@ module FedexApi
         case total_weight[:value]
         when 0..0.5 then 'FEDEX_ENVELOPE'
         when 0.51..10 then 'FEDEX_PAK'
-        else  'YOUR_PACKAGING'
+        else 'YOUR_PACKAGING'
         end
       end
 
